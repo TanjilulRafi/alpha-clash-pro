@@ -1,29 +1,29 @@
 function handleKeyboard(event){
     const playerPressed = event.key;
 
+    if(playerPressed==='Escape'){
+        gameOver();
+    }
+
     const currentAlphabetElement = document.getElementById('current-alphabet');
     const currentAlphabet = currentAlphabetElement.innerText;
     const expectedAlphabet = currentAlphabet.toLowerCase();
-    console.log(playerPressed, expectedAlphabet)
 
     if ( playerPressed === expectedAlphabet){
-        const currentScoreElem = document.getElementById('current-score');
-        const currentScoreText = currentScoreElem.innerText;
-        const currentScore = parseInt(currentScoreText);
+        const currentScore = getTextElementValueById('current-score')
         const newScore = currentScore+1;
-        currentScoreElem.innerText = newScore;
+        setTextElementValueById('current-score',newScore);
         removeBgColorById(expectedAlphabet);
         continueGame();
     }
     else{
-        const currentLifeElem = document.getElementById('current-life');
-        const currentLifeText = currentLifeElem.innerText;
-        const currentLife = parseInt(currentLifeText);
-
+        const currentLife = getTextElementValueById('current-life');
         const newLife = currentLife-1;
+        setTextElementValueById('current-life',newLife);
 
-
-        currentLifeElem.innerText = newLife;
+        if(newLife === 0){
+            gameOver();
+        }
     }
 }
 
@@ -41,7 +41,23 @@ function continueGame(){
 
 function play(){
     hideElementById('home-screen');
+    hideElementById('score');
     showElementById('play-ground');
+
+    setTextElementValueById('current-life',5);
+    setTextElementValueById('current-score',0)
+
     continueGame();
+}
+
+function gameOver(){
+    hideElementById('play-ground');
+    showElementById('score');
+
+    const lastScore = getTextElementValueById('current-score');
+    setTextElementValueById('game-score',lastScore);
+
+    const currentAlphabet = getElementTextById('current-alphabet');
+    removeBgColorById(currentAlphabet);
 }
 
